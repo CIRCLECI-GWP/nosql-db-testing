@@ -1,0 +1,43 @@
+const MongoClient = require("mongodb").MongoClient;
+const faker = require("faker");
+jest.setTimeout(30000);
+const uri =
+  "mongodb+srv://YOUR_DB_USER:YOUR_DB_PASSWORD@cluster0.g6fmf.mongodb.net/mytestdb?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+describe("Database Tests", () => {
+  let usersCollection;
+  beforeAll(async () => {
+    usersCollection = await new Promise((resolve, reject) => {
+      client.connect((err) => {
+        if (err) reject(err);
+        const collection = client.db("mytestdb").collection("users");
+        //console.log(collection)
+        resolve(collection);
+      });
+    });
+  });
+  test("Test CREATE", (done) => {
+    //console.log(usersCollection);
+    let newUsers = [];
+    let total_users_to_add = 3;
+    for (let i = 0; i < total_users_to_add; i++) {
+      newUsers.push({
+        name: faker.name.findName(),
+        email: faker.internet.email()
+      });
+    }
+    usersCollection.insertMany(newUsers, (err, results) => {
+      expect(results.result.n).toBe(total_users_to_add);
+      done();
+    });
+  }, 30000);
+  afterEach(async () => {
+    await usersCollection.deleteMany({});
+  });
+  afterAll(() => {
+    client.close();
+  });
+});
