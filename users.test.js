@@ -40,4 +40,11 @@ describe("Database Tests", () => {
   afterAll(() => {
     client.close();
   });
+  
+  test("Test READ", async () => {
+    let sampleUser = { name: "Test User", email: "test@user.com" };
+    await usersCollection.insertOne(sampleUser);
+    const findUser = await usersCollection.findOne({ email: sampleUser.email });
+    expect(findUser.name).toBe(sampleUser.name);
+  }, 30000);
 });
