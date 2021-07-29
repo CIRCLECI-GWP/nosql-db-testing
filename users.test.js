@@ -2,7 +2,7 @@ const MongoClient = require("mongodb").MongoClient;
 const faker = require("faker");
 jest.setTimeout(30000);
 const uri =
-  "mongodb+srv://YOUR_DB_USER:YOUR_DB_PASSWORD@cluster0.g6fmf.mongodb.net/mytestdb?retryWrites=true&w=majority";
+  "mongodb+srv://dbUser:IZauMGFQqJcAf3zc@cluster0.limvt.mongodb.net/mytestdb?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
