@@ -4,8 +4,8 @@ const { faker } = require("@faker-js/faker");
 jest.setTimeout(30000);
 
 const uri =
-  "mongodb+srv://YOUR_DB_USER:YOUR_DB_PASSWORD@YOUR_DB_HOST/?retryWrites=true&w=majority";
-  
+  "mongodb+srv://cciuser:DpgBTlQm3EaC1HKS@cluster0.ei7z4x6.mongodb.net/?retryWrites=true&w=majority";
+  // "mongodb+srv://YOUR_DB_USER:YOUR_DB_PASSWORD@YOUR_DB_HOST/?retryWrites=true&w=majority";
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -38,6 +38,16 @@ describe("Database Tests", () => {
 
     const result = await usersCollection.insertMany(newUsers);
     expect(result.insertedCount).toBe(total_users_to_add);
+  }, 30000);
+
+  test("Test READ", async () => {
+    let sampleUser = { name: "Test User", email: "test@user.com" };
+
+    await usersCollection.insertOne(sampleUser);
+
+    const findUser = await usersCollection.findOne({ email: sampleUser.email });
+
+    expect(findUser.name).toBe(sampleUser.name);
   }, 30000);
 
   afterEach(async () => {
